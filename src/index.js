@@ -3,6 +3,7 @@ import {
   makeMarkup,
   notifyNoMatches,
   notifyQuantityOfMatches,
+  notifyEmptyQuery,
 } from './helpers/helpers';
 import simpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -17,34 +18,39 @@ const refs = {
 refs.queryForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
-function onSearch(e) {
+async function onSearch(e) {
   e.preventDefault();
   queryService.searchQuery = e.currentTarget.elements.searchQuery.value;
+  if (queryService.searchQuery.trim() === '') {
+    notifyEmptyQuery();
+    return;
+  }
   clearContent();
+
   queryService.resetPageCounter();
+
   hideLoadmoreBtn();
-  queryService.fetchImages().then(data => {
-    if (data.hits.length !== 0) {
-      notifyQuantityOfMatches(data.total);
-      appendMarkup(data.hits);
-      queryService.galleryEl = new simpleLightbox('.gallery a', {
-        captions: true,
-        captionsData: 'alt',
-        captionDelay: 250,
-      });
-      showLoadmoreBtn();
-    } else {
-      notifyNoMatches();
-    }
-  });
-  console.log(queryService);
+
+  const images = await queryService.fetchImages();
+  console.log(images);
+  if (images.hits.length !== 0) {
+    notifyQuantityOfMatches(images.total);
+    appendMarkup(images.hits);
+    queryService.galleryEl = new simpleLightbox('.gallery a', {
+      captions: true,
+      captionsData: 'alt',
+      captionDelay: 250,
+    });
+    showLoadmoreBtn();
+  } else {
+    notifyNoMatches();
+  }
 }
 
-function onLoadMore() {
-  queryService.fetchImages().then(data => {
-    appendMarkup(data.hits);
-    queryService.galleryEl.refresh();
-  });
+async function onLoadMore() {
+  const images = await queryService.fetchImages();
+  appendMarkup(images.hits);
+  queryService.galleryEl.refresh();
 }
 
 function appendMarkup(data) {

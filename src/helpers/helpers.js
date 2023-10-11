@@ -37,3 +37,7 @@ export function notifyNoMatches() {
 export function notifyQuantityOfMatches(totaHits) {
   Notiflix.Notify.success(`Hooray! We found ${totaHits} images.`);
 }
+
+export function notifyEmptyQuery() {
+  Notiflix.Notify.warning('Please, enter your request ');
+}

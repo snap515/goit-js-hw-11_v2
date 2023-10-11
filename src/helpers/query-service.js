@@ -9,7 +9,7 @@ export default class QueryService {
     this.currentPage = 1;
   }
 
-  fetchImages() {
+  async fetchImages() {
     const params = {
       key: API_KEY,
       per_page: 40,
@@ -17,18 +17,19 @@ export default class QueryService {
       orientation: 'horizontal',
       safesearch: true,
     };
-
-    return axios
-      .get(`${BASE_URL}?page=${this.currentPage}&q=${this.searchQuery}`, {
-        params,
-      })
-      .then(response => {
-        this.incrementPage();
-        console.log(response.data);
-
-        return response.data;
-      })
-      .catch(error => console.log(error));
+    try {
+      const response = await axios.get(
+        `${BASE_URL}?page=${this.currentPage}&q=${this.searchQuery}`,
+        {
+          params,
+        }
+      );
+      this.incrementPage();
+      console.log(response);
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   resetPageCounter() {
