@@ -42,6 +42,12 @@ export function notifyEmptyQuery() {
   Notiflix.Notify.warning('Please, enter your request ');
 }
 
+export function notifyEndOfQuery() {
+  Notiflix.Notify.info(
+    "We're sorry, but you've reached the end of search results."
+  );
+}
+
 export function smoothScroll() {
   const { height: cardHeight } = document
     .querySelector('.gallery')

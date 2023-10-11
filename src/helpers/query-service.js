@@ -1,31 +1,32 @@
 import axios from 'axios';
 
-const API_KEY = '39808878-d17211b11e4a3c923ce198349';
-const BASE_URL = `https://pixabay.com/api/`;
-
 export default class QueryService {
   constructor() {
+    this.URL = `https://pixabay.com/api/`;
+    this.key = '39808878-d17211b11e4a3c923ce198349';
     this.searchQuery = '';
     this.currentPage = 1;
+    this.per_page = 40;
+    this.watchedImages = 0;
   }
 
-  async fetchImages() {
+  fetchImages() {
     const params = {
-      key: API_KEY,
-      per_page: 40,
+      key: this.key,
+      per_page: this.per_page,
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: true,
     };
-    const response = await axios.get(
-      `${BASE_URL}?page=${this.currentPage}&q=${this.searchQuery}`,
-      {
+    return axios
+      .get(`${this.URL}?page=${this.currentPage}&q=${this.searchQuery}`, {
         params,
-      }
-    );
-    this.incrementPage();
-    console.log(response);
-    return response.data;
+      })
+      .then(response => {
+        this.incrementPage();
+        console.log(response);
+        return response.data;
+      });
   }
 
   resetPageCounter() {
