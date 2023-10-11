@@ -1,4 +1,4 @@
-import QueryService from './query-service';
+import QueryService from './helpers/query-service';
 import {
   makeMarkup,
   notifyNoMatches,
@@ -27,7 +27,11 @@ function onSearch(e) {
     if (data.hits.length !== 0) {
       notifyQuantityOfMatches(data.total);
       appendMarkup(data.hits);
-      queryService.galleryEl = new simpleLightbox('.gallery a');
+      queryService.galleryEl = new simpleLightbox('.gallery a', {
+        captions: true,
+        captionsData: 'alt',
+        captionDelay: 250,
+      });
       showLoadmoreBtn();
     } else {
       notifyNoMatches();
