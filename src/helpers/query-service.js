@@ -17,19 +17,15 @@ export default class QueryService {
       orientation: 'horizontal',
       safesearch: true,
     };
-    try {
-      const response = await axios.get(
-        `${BASE_URL}?page=${this.currentPage}&q=${this.searchQuery}`,
-        {
-          params,
-        }
-      );
-      this.incrementPage();
-      console.log(response);
-      return response.data;
-    } catch (err) {
-      console.log(err);
-    }
+    const response = await axios.get(
+      `${BASE_URL}?page=${this.currentPage}&q=${this.searchQuery}`,
+      {
+        params,
+      }
+    );
+    this.incrementPage();
+    console.log(response);
+    return response.data;
   }
 
   resetPageCounter() {
