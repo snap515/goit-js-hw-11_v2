@@ -32,27 +32,35 @@ async function onSearch(e) {
 
   hideLoadmoreBtn();
 
-  const images = await queryService.fetchImages();
-  console.log(images);
-  if (images.hits.length !== 0) {
-    notifyQuantityOfMatches(images.total);
-    appendMarkup(images.hits);
-    queryService.galleryEl = new simpleLightbox('.gallery a', {
-      captions: true,
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
-    showLoadmoreBtn();
-  } else {
-    notifyNoMatches();
+  try {
+    const images = await queryService.fetchImages();
+    console.log(images);
+    if (images.hits.length !== 0) {
+      notifyQuantityOfMatches(images.total);
+      appendMarkup(images.hits);
+      queryService.galleryEl = new simpleLightbox('.gallery a', {
+        captions: true,
+        captionsData: 'alt',
+        captionDelay: 250,
+      });
+      showLoadmoreBtn();
+    } else {
+      notifyNoMatches();
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 
 async function onLoadMore() {
-  const images = await queryService.fetchImages();
-  appendMarkup(images.hits);
-  queryService.galleryEl.refresh();
-  smoothScroll();
+  try {
+    const images = await queryService.fetchImages();
+    appendMarkup(images.hits);
+    queryService.galleryEl.refresh();
+    smoothScroll();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function appendMarkup(data) {
