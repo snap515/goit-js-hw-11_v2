@@ -4,6 +4,7 @@ import {
   notifyNoMatches,
   notifyQuantityOfMatches,
   notifyEmptyQuery,
+  smoothScroll,
 } from './helpers/helpers';
 import simpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -51,6 +52,7 @@ async function onLoadMore() {
   const images = await queryService.fetchImages();
   appendMarkup(images.hits);
   queryService.galleryEl.refresh();
+  smoothScroll();
 }
 
 function appendMarkup(data) {

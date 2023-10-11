@@ -41,3 +41,14 @@ export function notifyQuantityOfMatches(totaHits) {
 export function notifyEmptyQuery() {
   Notiflix.Notify.warning('Please, enter your request ');
 }
+
+export function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
